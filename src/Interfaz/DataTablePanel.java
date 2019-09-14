@@ -50,19 +50,19 @@ public class DataTablePanel extends JPanel{
 	
 	public String[] getInputs(boolean isMealy) {
 		
-		String[] response;
+		String[] inputs;
 		if(isMealy) {
-			response = new String[tabla[0].length-1];
+			inputs = new String[tabla[0].length-1];
 			for(int i = 1; i< tabla[0].length; i++) {
-				response[i-1] = tabla[0][i].getText();
+				inputs[i-1] = tabla[0][i].getText();
 			}
 		}else {
-		 response = new String[tabla[0].length-2];
+			inputs = new String[tabla[0].length-2];
 		for(int i = 1; i< tabla[0].length-1; i++) {
-			response[i-1] = tabla[0][i].getText();
+			inputs[i-1] = tabla[0][i].getText();
 		}
 		}
-		return response;
+		return inputs;
 	}
 	
 	public String[][] getTabla() throws EmptyFieldException, InitialStateException {

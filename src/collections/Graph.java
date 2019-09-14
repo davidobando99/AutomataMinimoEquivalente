@@ -14,26 +14,26 @@ public class Graph<V, E> implements IGraph<V,E>, Serializable {
 	public static final int AMOUNT = 100;
 	public static final int AMOUNT1 = 22;
 	private int[][] adjacentsMatrix;
-	private double[][] weightMatrix;
+	private String[][] weightMatrix;
 	private HashMap<String, NodeGraph<V>> vertices;
 	private ArrayList<Edge<V, E>> edges;
-	private ArrayList<V> nodes;
+	private ArrayList<NodeGraph<V>> nodes;
 
 	public Graph() {
 		vertices = new HashMap<String, NodeGraph<V>>();
-		nodes= new ArrayList<V>();
+		nodes= new ArrayList<NodeGraph<V>>();
 		edges = new ArrayList<Edge<V, E>>();
 		adjacentsMatrix = new int[AMOUNT][AMOUNT];
-		weightMatrix = new double[AMOUNT][AMOUNT];
+		weightMatrix = new String[AMOUNT][AMOUNT];
 
-		inicializeMatrix();
+		//inicializeMatrix();
 	}
 	@Override
-	public ArrayList<V> getNodes() {
+	public ArrayList<NodeGraph<V>> getNodes() {
 		return nodes;
 	}
 	@Override
-	public void setNodes(ArrayList<V> nodes) {
+	public void setNodes(ArrayList<NodeGraph<V>> nodes) {
 		this.nodes = nodes;
 	}
 
@@ -48,12 +48,12 @@ public class Graph<V, E> implements IGraph<V,E>, Serializable {
 	}
 
 	@Override
-	public double[][] getWeightMatrix() {
+	public String[][] getWeightMatrix() {
 		return weightMatrix;
 	}
 
 	@Override
-	public void setWeightMatrix(double[][] weightMatrix) {
+	public void setWeightMatrix(String[][] weightMatrix) {
 		this.weightMatrix = weightMatrix;
 	}
 
@@ -97,34 +97,34 @@ public class Graph<V, E> implements IGraph<V,E>, Serializable {
 
 	}
 	@Override
-	public void insertEdge(E edge,String vertex1, String vertex2, double weight) {
+	public void insertEdge(E edge,String vertex1, String vertex2, String weight) {
 		NodeGraph<V> origin = searchVertex(vertex1);
 		NodeGraph<V> end = searchVertex(vertex2);
 		Edge<V, E> edge1 = new Edge<V, E>(edge, weight, origin, end);
 
 		edges.add(edge1);
-		addToMatrix(origin.getPos(), end.getPos());
+		//addToMatrix(origin.getPos(), end.getPos());
 
-		int x = edge1.getOrigin().getPos();
-		int y = edge1.getEnd().getPos();
-
-		weightMatrix[x][y] = edge1.getWeight();
-		weightMatrix[y][x] = edge1.getWeight();
+//		int x = edge1.getOrigin().getPos();
+//		int y = edge1.getEnd().getPos();
+//
+//		weightMatrix[x][y] = edge1.getWeight();
+//		weightMatrix[y][x] = edge1.getWeight();
 		origin.addAdjacent(end);
 		end.addAdjacent(origin);
 
 	}
-	@Override
-	public String foundKey(int pos){
-		String found =null;
-	
-		for (Map.Entry<String, NodeGraph<V>> entry : vertices.entrySet()) {
-			if (entry.getValue().getPos()==pos) {
-				found =entry.getKey();
-			}
-	}
-		return found;
-}
+//	@Override
+//	public String foundKey(int pos){
+//		String found =null;
+//	
+//		for (Map.Entry<String, NodeGraph<V>> entry : vertices.entrySet()) {
+//			if (entry.getValue().getPos()==pos) {
+//				found =entry.getKey();
+//			}
+//	}
+//		return found;
+//}
 	//
 	// public Edge<V, E> searchEdge(String key) {
 	// return edges.get(key);
@@ -135,16 +135,16 @@ public class Graph<V, E> implements IGraph<V,E>, Serializable {
 	// return edges.remove(key);
 
 	// }
-	@Override
-	public void inicializeMatrix() {
-		for (int i = 0; i < adjacentsMatrix.length; i++) {
-			for (int j = 0; j < adjacentsMatrix[i].length; j++) {
-				adjacentsMatrix[i][j] = 0;
-			}
-		}
-		fillWeightMatrix();
-
-	}
+//	@Override
+//	public void inicializeMatrix() {
+//		for (int i = 0; i < adjacentsMatrix.length; i++) {
+//			for (int j = 0; j < adjacentsMatrix[i].length; j++) {
+//				adjacentsMatrix[i][j] = 0;
+//			}
+//		}
+//		fillWeightMatrix();
+//
+//	}
 	@Override
 	public boolean areAdjacents(String vertex1, String vertex2) {
 		NodeGraph<V> origin = searchVertex(vertex1);
@@ -154,265 +154,265 @@ public class Graph<V, E> implements IGraph<V,E>, Serializable {
 		} else
 			return false;
 	}
-	@Override
-	public Double adjacentsWeight(NodeGraph<V> origin, NodeGraph<V> end) {
-		if (weightMatrix[origin.getPos()][end.getPos()] > 0) {
-			return weightMatrix[origin.getPos()][end.getPos()];
-		} else
-			return 0.0;
-	}
-	@Override
-	public void addToMatrix(int i, int j) {
-		adjacentsMatrix[i][j] += 1;
-		adjacentsMatrix[j][i] += 1;
-	}
-	@Override
-	public void removeFromMatrix(int i, int j) {
-		if (adjacentsMatrix[i][j] > 0)
-			adjacentsMatrix[i][j] -= 1;
-	}
-	@Override
-	public double[] dijkstra(String key) {
-		NodeGraph<V> node = searchVertex(key);
-		// System.out.println(node.getValue()+ "value node");
-		Queue<NodeGraph<V>> queue = new LinkedList<NodeGraph<V>>();
-		double[] distance = new double[vertices.size()];
-		boolean[] visited = new boolean[vertices.size()];
-
-		
-		for (int i=0;i<vertices.size();i++) {
-			if (foundKey(i).equals(key)) {
-				distance[i] = 0.0;
-				visited[i] = false;
-			} else {
-				distance[i] = INFINITY;
-				visited[i] = false;
-			}
-			
-		}
-
-		queue.offer(node);
-
-		while (!queue.isEmpty()) {
-			NodeGraph<V> actual = queue.peek();
-			queue.poll();
-			int posActual = actual.getPos();
-
-			visited[posActual] = true;
-			for (int j = 0; j < actual.getAdjList().size(); j++) {
-				NodeGraph<V> adyacent = actual.getAdjList().get(j);
-				double peso = adjacentsWeight(actual, adyacent);
-				int posAdj = adyacent.getPos();
-
-				if (distance[posActual] + peso < distance[posAdj]) {
-					distance[posAdj] = distance[posActual] + peso;
-					queue.offer(adyacent);
-
-				}
-
-			}
-
-		}
-		return distance;
-
-	}
-	
-	
-	@Override
-	public int[] dijkstraNodes(String key) {
-		NodeGraph<V> node = searchVertex(key);
-		// System.out.println(node.getValue()+ "value node");
-		Queue<NodeGraph<V>> queue = new LinkedList<NodeGraph<V>>();
-		double[] distance = new double[vertices.size()];
-		boolean[] visited = new boolean[vertices.size()];
-		int[] previo = new int[ vertices.size() ]; 
-		ArrayList<ArrayList<Integer>> nodes= new ArrayList<ArrayList<Integer>>();
-
-		for (int i=0;i<vertices.size();i++) {
-			if (foundKey(i).equals(key)) {
-				distance[i] = 0.0;
-				visited[i] = false;
-			} else {
-				distance[i] = INFINITY;
-				visited[i] = false;
-			}
-			nodes.add(new ArrayList<Integer>());
-			previo[i]=-1;
-			
-		}
-		
-
-		queue.offer(node);
-
-		while (!queue.isEmpty()) {
-			NodeGraph<V> actual = queue.peek();
-			queue.poll();
-			int posActual = actual.getPos();
-
-			visited[posActual] = true;
-			for (int j = 0; j < actual.getAdjList().size(); j++) {
-				NodeGraph<V> adyacent = actual.getAdjList().get(j);
-				double peso = adjacentsWeight(actual, adyacent);
-				int posAdj = adyacent.getPos();
-
-				if (distance[posActual] + peso < distance[posAdj]) {
-					distance[posAdj] = distance[posActual] + peso;
-					nodes.get(posAdj).add(posActual);
-					previo[ posAdj ] = posActual; 
-					queue.offer(adyacent);
-
-				}
-
-			}
-
-		}
-		return previo;
-		
-		
-	}
-	@Override
-	public void print(int[] previo, int posEnd) {
-        if( previo[ posEnd ] != -1 ) {  
-        	print(previo, previo[ posEnd ] ); 
-            
-        }
-        nodes.add(foundNode(posEnd));
-            
-       
-    }
-	
-	@Override
-	public int foundPos(String key) {
-		NodeGraph<V> end = searchVertex(key);
-		int posEnd = end.getPos();
-		return posEnd;
-	}
-	@Override
-	public V foundNode(int pos) {
-		NodeGraph<V> node =null;
-		for (Map.Entry<String, NodeGraph<V>> entry : vertices.entrySet()) {
-			if (entry.getValue().getPos()==pos) {
-			 node= entry.getValue();
-			}
-			
-		}return node.getValue();
-	}
-	
-	@Override
-	public void fillWeightMatrix() {
-
-		for (int i = 0; i < adjacentsMatrix.length; i++) {
-			for (int j = 0; j < adjacentsMatrix.length; j++) {
-
-				if (i == j)
-					weightMatrix[i][j] = 0.0;
-
-				else if (adjacentsMatrix[i][j] == 0) {
-					weightMatrix[i][j] = INFINITY;
-
-				}
-			}
-		}
-
-	}
-	@Override
-	public double[][] floydWarshall() {
-
-		double[][] matrix = weightMatrix;
-
-		for (int i = 0; i < matrix.length; i++) {
-			for (int j = 0; j < matrix.length; j++) {
-				for (int k = 0; k < matrix.length; k++) {
-
-					if (matrix[i][k] + matrix[j][i] < matrix[j][k]) {
-						matrix[j][k] = matrix[i][k] + matrix[j][i];
-					}
-				}
-			}
-		}
-		return matrix;
-
-	}
-	@Override
-	public Edge<V, E> minEdge() {
-
-		Edge<V, E> min = edges.get(0);
-
-		for (int i = 0; i < edges.size(); i++) {
-
-			if (edges.get(i).getWeight() < min.getWeight()) {
-				min = edges.get(i);
-			}
-		}
-
-		return min;
-
-	}
-	@Override
-	public int minWeight(double key[], boolean[] visits) {
-
-		double min = INFINITY;
-		int val = -1;
-
-		for (int i = 0; i < key.length; i++) {
-
-			if (key[i] < min && !visits[i]) {
-//				System.out.println(key[i]+"ME BITCH");
-				min = key[i];
-
-				val = i;
-			}
-		}
-		return val;
-
-	}
-	@Override
-	public int[] primMTS() {
-
-		NodeGraph<V> node = minEdge().getOrigin();
-//		System.out.println(node.getValue() + "PRIM");
-		int key = node.getPos();
-
-		double dist[] = new double[vertices.size()];
-		int order[] = new int[vertices.size()];
-		String parent[] = new String[vertices.size()];
-		boolean[] visits = new boolean[vertices.size()];
-		for (int i = 0; i < visits.length; i++) {
-			dist[i] = INFINITY;
-			visits[i] = false;
-		}
-		
-
-		dist[key] = 0.0;
-		parent[key] = key + "";
-
-		for (int i = 0; i < visits.length; i++) {
-
-			int u = minWeight(dist, visits);
-			visits[u] = true;
-			order[i] = u;
-
-			for (int j = 0; j < visits.length; j++) {
-
-				if (weightMatrix[u][j] != 0 && !visits[j] && weightMatrix[u][j] < dist[j]) {
-					parent[j] = u + " --> " + j;
-
-					dist[j] = weightMatrix[u][j];
-
-				}
-			}
-
-		}
-
-		return order;
-
-	}
-	@Override
-	public void makeSet(int parent[], int n) {
-		for (int i = 0; i < n; i++) {
-			parent[i] = i;
-		}
-	}
+//	@Override
+//	public Double adjacentsWeight(NodeGraph<V> origin, NodeGraph<V> end) {
+//		if (weightMatrix[origin.getPos()][end.getPos()] > 0) {
+//			return weightMatrix[origin.getPos()][end.getPos()];
+//		} else
+//			return 0.0;
+//	}
+//	@Override
+//	public void addToMatrix(int i, int j) {
+//		adjacentsMatrix[i][j] += 1;
+//		adjacentsMatrix[j][i] += 1;
+//	}
+//	@Override
+//	public void removeFromMatrix(int i, int j) {
+//		if (adjacentsMatrix[i][j] > 0)
+//			adjacentsMatrix[i][j] -= 1;
+//	}
+//	@Override
+//	public double[] dijkstra(String key) {
+//		NodeGraph<V> node = searchVertex(key);
+//		// System.out.println(node.getValue()+ "value node");
+//		Queue<NodeGraph<V>> queue = new LinkedList<NodeGraph<V>>();
+//		double[] distance = new double[vertices.size()];
+//		boolean[] visited = new boolean[vertices.size()];
+//
+//		
+//		for (int i=0;i<vertices.size();i++) {
+//			if (foundKey(i).equals(key)) {
+//				distance[i] = 0.0;
+//				visited[i] = false;
+//			} else {
+//				distance[i] = INFINITY;
+//				visited[i] = false;
+//			}
+//			
+//		}
+//
+//		queue.offer(node);
+//
+//		while (!queue.isEmpty()) {
+//			NodeGraph<V> actual = queue.peek();
+//			queue.poll();
+//			int posActual = actual.getPos();
+//
+//			visited[posActual] = true;
+//			for (int j = 0; j < actual.getAdjList().size(); j++) {
+//				NodeGraph<V> adyacent = actual.getAdjList().get(j);
+//				double peso = adjacentsWeight(actual, adyacent);
+//				int posAdj = adyacent.getPos();
+//
+//				if (distance[posActual] + peso < distance[posAdj]) {
+//					distance[posAdj] = distance[posActual] + peso;
+//					queue.offer(adyacent);
+//
+//				}
+//
+//			}
+//
+//		}
+//		return distance;
+//
+//	}
+//	
+//	
+//	@Override
+//	public int[] dijkstraNodes(String key) {
+//		NodeGraph<V> node = searchVertex(key);
+//		// System.out.println(node.getValue()+ "value node");
+//		Queue<NodeGraph<V>> queue = new LinkedList<NodeGraph<V>>();
+//		double[] distance = new double[vertices.size()];
+//		boolean[] visited = new boolean[vertices.size()];
+//		int[] previo = new int[ vertices.size() ]; 
+//		ArrayList<ArrayList<Integer>> nodes= new ArrayList<ArrayList<Integer>>();
+//
+//		for (int i=0;i<vertices.size();i++) {
+//			if (foundKey(i).equals(key)) {
+//				distance[i] = 0.0;
+//				visited[i] = false;
+//			} else {
+//				distance[i] = INFINITY;
+//				visited[i] = false;
+//			}
+//			nodes.add(new ArrayList<Integer>());
+//			previo[i]=-1;
+//			
+//		}
+//		
+//
+//		queue.offer(node);
+//
+//		while (!queue.isEmpty()) {
+//			NodeGraph<V> actual = queue.peek();
+//			queue.poll();
+//			int posActual = actual.getPos();
+//
+//			visited[posActual] = true;
+//			for (int j = 0; j < actual.getAdjList().size(); j++) {
+//				NodeGraph<V> adyacent = actual.getAdjList().get(j);
+//				double peso = adjacentsWeight(actual, adyacent);
+//				int posAdj = adyacent.getPos();
+//
+//				if (distance[posActual] + peso < distance[posAdj]) {
+//					distance[posAdj] = distance[posActual] + peso;
+//					nodes.get(posAdj).add(posActual);
+//					previo[ posAdj ] = posActual; 
+//					queue.offer(adyacent);
+//
+//				}
+//
+//			}
+//
+//		}
+//		return previo;
+//		
+//		
+//	}
+////	@Override
+////	public void print(int[] previo, int posEnd) {
+////        if( previo[ posEnd ] != -1 ) {  
+////        	print(previo, previo[ posEnd ] ); 
+////            
+////        }
+////        nodes.add(foundNode(posEnd));
+////            
+////       
+////    }
+////	
+//	@Override
+//	public int foundPos(String key) {
+//		NodeGraph<V> end = searchVertex(key);
+//		int posEnd = end.getPos();
+//		return posEnd;
+//	}
+//	@Override
+//	public V foundNode(int pos) {
+//		NodeGraph<V> node =null;
+//		for (Map.Entry<String, NodeGraph<V>> entry : vertices.entrySet()) {
+//			if (entry.getValue().getPos()==pos) {
+//			 node= entry.getValue();
+//			}
+//			
+//		}return node.getValue();
+//	}
+//	
+//	@Override
+//	public void fillWeightMatrix() {
+//
+//		for (int i = 0; i < adjacentsMatrix.length; i++) {
+//			for (int j = 0; j < adjacentsMatrix.length; j++) {
+//
+//				if (i == j)
+//					weightMatrix[i][j] = 0.0;
+//
+//				else if (adjacentsMatrix[i][j] == 0) {
+//					weightMatrix[i][j] = INFINITY;
+//
+//				}
+//			}
+//		}
+//
+//	}
+//	@Override
+//	public double[][] floydWarshall() {
+//
+//		double[][] matrix = weightMatrix;
+//
+//		for (int i = 0; i < matrix.length; i++) {
+//			for (int j = 0; j < matrix.length; j++) {
+//				for (int k = 0; k < matrix.length; k++) {
+//
+//					if (matrix[i][k] + matrix[j][i] < matrix[j][k]) {
+//						matrix[j][k] = matrix[i][k] + matrix[j][i];
+//					}
+//				}
+//			}
+//		}
+//		return matrix;
+//
+//	}
+//	@Override
+//	public Edge<V, E> minEdge() {
+//
+//		Edge<V, E> min = edges.get(0);
+//
+//		for (int i = 0; i < edges.size(); i++) {
+//
+//			if (edges.get(i).getWeight() < min.getWeight()) {
+//				min = edges.get(i);
+//			}
+//		}
+//
+//		return min;
+//
+//	}
+//	@Override
+//	public int minWeight(double key[], boolean[] visits) {
+//
+//		double min = INFINITY;
+//		int val = -1;
+//
+//		for (int i = 0; i < key.length; i++) {
+//
+//			if (key[i] < min && !visits[i]) {
+////				System.out.println(key[i]+"ME BITCH");
+//				min = key[i];
+//
+//				val = i;
+//			}
+//		}
+//		return val;
+//
+//	}
+//	@Override
+//	public int[] primMTS() {
+//
+//		NodeGraph<V> node = minEdge().getOrigin();
+////		System.out.println(node.getValue() + "PRIM");
+//		int key = node.getPos();
+//
+//		double dist[] = new double[vertices.size()];
+//		int order[] = new int[vertices.size()];
+//		String parent[] = new String[vertices.size()];
+//		boolean[] visits = new boolean[vertices.size()];
+//		for (int i = 0; i < visits.length; i++) {
+//			dist[i] = INFINITY;
+//			visits[i] = false;
+//		}
+//		
+//
+//		dist[key] = 0.0;
+//		parent[key] = key + "";
+//
+//		for (int i = 0; i < visits.length; i++) {
+//
+//			int u = minWeight(dist, visits);
+//			visits[u] = true;
+//			order[i] = u;
+//
+//			for (int j = 0; j < visits.length; j++) {
+//
+//				if (weightMatrix[u][j] != 0 && !visits[j] && weightMatrix[u][j] < dist[j]) {
+//					parent[j] = u + " --> " + j;
+//
+//					dist[j] = weightMatrix[u][j];
+//
+//				}
+//			}
+//
+//		}
+//
+//		return order;
+//
+//	}
+//	@Override
+//	public void makeSet(int parent[], int n) {
+//		for (int i = 0; i < n; i++) {
+//			parent[i] = i;
+//		}
+//	}
 	@Override
 	public int find(int parent[], int x) {
 
@@ -435,53 +435,53 @@ public class Graph<V, E> implements IGraph<V,E>, Serializable {
 		int yRoot = find(parent, y);
 		parent[xRoot] = yRoot;
 	}
-	@Override
-	public ArrayList<Edge<V, E>> sortEdges(ArrayList<Edge<V, E>> edges) {
-
-		for (int i = 1; i < edges.size(); i++) {
-			for (int j = i; j > 0 && edges.get(j - 1).compareTo(edges.get(j)) > 0; j--) {
-
-				Edge<V, E> tmp = edges.get(j);
-				edges.set(j, edges.get(j - 1));
-				edges.set(j - 1, tmp);
-
-			}
-		}
-		return edges;
-	}
-	@Override
-	public Double[] kruskal() {
-		int total = 0;
-		int numEdges = 0;
-		Double[] minimunTree = new Double[vertices.size() - 1];
-		int[] parent = new int[vertices.size()];
-		makeSet(parent, vertices.size());
-		ArrayList<Edge<V, E>> edgesSorted = sortEdges(edges);
-		for (int i = 0; i < edgesSorted.size(); i++) {
-			int origin = edgesSorted.get(i).getOrigin().getPos();
-			int end = edgesSorted.get(i).getEnd().getPos();
-			double weight = edgesSorted.get(i).getWeight();
-
-			if (!sameRoot(parent, origin, end)) {
-				total += weight;
-				minimunTree[numEdges++] = edgesSorted.get(i).getWeight();
-				union(parent, origin, end);
-			}
-		}
-
-		return minimunTree;
-	}
-	@Override
-	public void dfs(boolean visited[], NodeGraph<V> origin, NodeGraph<V> end) {
-		ArrayList<NodeGraph<V>> vertices = new ArrayList<NodeGraph<V>>();
-		visited[origin.getPos()] = true;
-		for (int i = 0; i < origin.getAdjList().size(); i++) {
-			if (!visited[origin.getAdjList().get(i).getPos()] && origin.getAdjList().get(i) != end) {
-				dfs(visited, origin.getAdjList().get(i), end);
-				vertices.add(origin.getAdjList().get(i));
-			}
-		}
-	}
+//	@Override
+//	public ArrayList<Edge<V, E>> sortEdges(ArrayList<Edge<V, E>> edges) {
+//
+//		for (int i = 1; i < edges.size(); i++) {
+//			for (int j = i; j > 0 && edges.get(j - 1).compareTo(edges.get(j)) > 0; j--) {
+//
+//				Edge<V, E> tmp = edges.get(j);
+//				edges.set(j, edges.get(j - 1));
+//				edges.set(j - 1, tmp);
+//
+//			}
+//		}
+//		return edges;
+//	}
+//	@Override
+//	public Double[] kruskal() {
+//		int total = 0;
+//		int numEdges = 0;
+//		Double[] minimunTree = new Double[vertices.size() - 1];
+//		int[] parent = new int[vertices.size()];
+//		makeSet(parent, vertices.size());
+//		ArrayList<Edge<V, E>> edgesSorted = sortEdges(edges);
+//		for (int i = 0; i < edgesSorted.size(); i++) {
+//			int origin = edgesSorted.get(i).getOrigin().getPos();
+//			int end = edgesSorted.get(i).getEnd().getPos();
+//			double weight = edgesSorted.get(i).getWeight();
+//
+//			if (!sameRoot(parent, origin, end)) {
+//				total += weight;
+//				minimunTree[numEdges++] = edgesSorted.get(i).getWeight();
+//				union(parent, origin, end);
+//			}
+//		}
+//
+//		return minimunTree;
+////	}
+//	@Override
+//	public void dfs(boolean visited[], NodeGraph<V> origin, NodeGraph<V> end) {
+//		ArrayList<NodeGraph<V>> vertices = new ArrayList<NodeGraph<V>>();
+//		visited[origin.getPos()] = true;
+//		for (int i = 0; i < origin.getAdjList().size(); i++) {
+//			if (!visited[origin.getAdjList().get(i).getPos()] && origin.getAdjList().get(i) != end) {
+//				dfs(visited, origin.getAdjList().get(i), end);
+//				vertices.add(origin.getAdjList().get(i));
+//			}
+//		}
+//	}
 
 	public void displayVertex(NodeGraph<V> a) {
 		System.out.println(a.getValue().toString());
@@ -554,20 +554,20 @@ public class Graph<V, E> implements IGraph<V,E>, Serializable {
 			}
 		}
 	}
-	@Override
-	public Edge<V, E> searchEdge(double weight){
-		boolean wasFound = false;
-		Edge<V,E> aux = null;
-		for(int i = 0; i < edges.size() && !wasFound; i++) {
-			if(weight == edges.get(i).getWeight()) {
-				aux = edges.get(i);
-				wasFound = true;
-			}
-		}
-		
-		return aux;
-	}
-	
+//	@Override
+//	public Edge<V, E> searchEdge(double weight){
+//		boolean wasFound = false;
+//		Edge<V,E> aux = null;
+//		for(int i = 0; i < edges.size() && !wasFound; i++) {
+//			if(weight == edges.get(i).getWeight()) {
+//				aux = edges.get(i);
+//				wasFound = true;
+//			}
+//		}
+//		
+//		return aux;
+//	}
+//	
 
 	public static void main(String[] args) {
 		// Graph<String, Double> grafo= new Graph<String, Double>();

@@ -5,17 +5,17 @@ import java.util.HashMap;
 
 public interface IGraph<V, E>  {
 
-	public ArrayList<V> getNodes();
+	public ArrayList<NodeGraph<V>> getNodes();
 
-	public void setNodes(ArrayList<V> nodes);
+	public void setNodes(ArrayList<NodeGraph<V>> nodes);
 
 	public int[][] getAdjacentsMatrix();
 
 	public void setAdjacentsMatrix(int[][] adjacentsMatrix);
 
-	public double[][] getWeightMatrix();
+	public String[][] getWeightMatrix();
 
-	public void setWeightMatrix(double[][] weightMatrix);
+	public void setWeightMatrix(String[][] weightMatrix);
 
 	public HashMap<String, NodeGraph<V>> getVertices();
 
@@ -31,41 +31,41 @@ public interface IGraph<V, E>  {
 
 	public void removeVertex(String key);
 
-	public void insertEdge(E edge, String vertex1, String vertex2, double weight);
+	public void insertEdge(E edge, String vertex1, String vertex2, String weight);
 
-	public String foundKey(int pos);
+	//public String foundKey(int pos);
 
-	public void inicializeMatrix();
+	//public void inicializeMatrix();
 
 	public boolean areAdjacents(String vertex1, String vertex2);
 
-	public Double adjacentsWeight(NodeGraph<V> origin, NodeGraph<V> end);
+//	public Double adjacentsWeight(NodeGraph<V> origin, NodeGraph<V> end);
+//
+//	public void addToMatrix(int i, int j);
+//
+//	public void removeFromMatrix(int i, int j);
+//
+//	public double[] dijkstra(String key);
+//
+//	public int[] dijkstraNodes(String key);
 
-	public void addToMatrix(int i, int j);
+	//public void print(int[] previo, int posEnd);
+//
+//	public int foundPos(String key);
+//
+//	public V foundNode(int pos);
+//
+//	public void fillWeightMatrix();
+//
+//	public double[][] floydWarshall();
+//
+//	public Edge<V, E> minEdge();
+//
+//	public int minWeight(double key[], boolean[] visits);
+//
+//	public int[] primMTS();
 
-	public void removeFromMatrix(int i, int j);
-
-	public double[] dijkstra(String key);
-
-	public int[] dijkstraNodes(String key);
-
-	public void print(int[] previo, int posEnd);
-
-	public int foundPos(String key);
-
-	public V foundNode(int pos);
-
-	public void fillWeightMatrix();
-
-	public double[][] floydWarshall();
-
-	public Edge<V, E> minEdge();
-
-	public int minWeight(double key[], boolean[] visits);
-
-	public int[] primMTS();
-
-	public void makeSet(int parent[], int n);
+	//public void makeSet(int parent[], int n);
 
 	public int find(int parent[], int x);
 
@@ -73,11 +73,11 @@ public interface IGraph<V, E>  {
 
 	public void union(int parent[], int x, int y);
 
-	public ArrayList<Edge<V, E>> sortEdges(ArrayList<Edge<V, E>> edges);
-
-	public Double[] kruskal();
-
-	public void dfs(boolean visited[], NodeGraph<V> origin, NodeGraph<V> end);
+//	public ArrayList<Edge<V, E>> sortEdges(ArrayList<Edge<V, E>> edges);
+//
+//	public Double[] kruskal();
+//
+//	public void dfs(boolean visited[], NodeGraph<V> origin, NodeGraph<V> end);
 
 	public void displayVertex(NodeGraph<V> a);
 
@@ -89,6 +89,6 @@ public interface IGraph<V, E>  {
 
 	public void dfsGraph(NodeGraph<V> node);
 
-	public Edge<V, E> searchEdge(double weight);
+	//public Edge<V, E> searchEdge(double weight);
 
 }

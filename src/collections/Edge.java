@@ -2,7 +2,7 @@ package collections;
 
 import java.io.Serializable;
 
-public class Edge<V,E> implements Comparable<Edge<V,E>>, Serializable{
+public class Edge<V,E> implements Serializable{
 	
 	/**
 	 * 
@@ -11,9 +11,9 @@ public class Edge<V,E> implements Comparable<Edge<V,E>>, Serializable{
 	private E value;
 	private NodeGraph<V> origin;
 	private NodeGraph<V> end;
-	private Double weight;
+	private String weight;
 	
-	public Edge(E value, Double weight, NodeGraph<V> origin, NodeGraph<V> end){
+	public Edge(E value, String weight, NodeGraph<V> origin, NodeGraph<V> end){
 		this.value=value;
 		this.weight=weight;
 		this.origin=origin;
@@ -47,26 +47,26 @@ public class Edge<V,E> implements Comparable<Edge<V,E>>, Serializable{
 		this.end = end;
 	}
 
-	public Double getWeight() {
+	public String getWeight() {
 		return weight;
 	}
 
-	public void setWeight(Double weight) {
+	public void setWeight(String weight) {
 		this.weight = weight;
 	}
 	
-	@Override
-	public int compareTo(Edge<V,E> edge) {
-		
-		int ret = 0;		
-		if(this.weight> edge.getWeight()) {
-			ret = 1;
-		}else {
-			ret = -1;
-		}
-		return ret;
-	}
-	
+//	@Override
+//	public int compareTo(Edge<V,E> edge) {
+//		
+//		int ret = 0;		
+//		if(this.weight> edge.getWeight()) {
+//			ret = 1;
+//		}else {
+//			ret = -1;
+//		}
+//		return ret;
+//	}
+//	
 	
 	
 	
