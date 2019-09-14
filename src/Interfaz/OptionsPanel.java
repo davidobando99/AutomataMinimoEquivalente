@@ -35,7 +35,7 @@ public class OptionsPanel extends JPanel implements ActionListener{
 		
 		reduced = new JButton(REDUCED);
 		reduced.setActionCommand(REDUCED);
-		//reduced.addActionListener(this);
+		reduced.addActionListener(this);
 		reduced.setBackground(Color.WHITE);
 		reduced.setEnabled(false);
 		add(reduced);
@@ -63,8 +63,16 @@ public class OptionsPanel extends JPanel implements ActionListener{
 			
 		}else if(comando.equals(REDUCED)) {
 			
+			if(initFrame.getMachine().equals(InitFrame.MEALY)) {
+				initFrame.showSetsSRMealy();
+			}else initFrame.showSetsSRMoore();
 			
-			//initFrame.reducedMachine();
+			initFrame.addStates();
+			
+			initFrame.addTransitionsMealy();
+			initFrame.states();
+			//initFrame.matriz();
+			initFrame.edges();
 			
 		}
 	}

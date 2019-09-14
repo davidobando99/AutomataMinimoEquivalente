@@ -45,13 +45,19 @@ public class DataTablePanel extends JPanel{
 	      
 	      
 	      add(auxPanel, BorderLayout.NORTH);
+	     
 	}
 	
-	
-	public String[] getInputs(boolean isMealy) {
+	/**
+	 * Metodo que me recorre la tabla dada por el usuario y me retorna el alfabeto de entrada del AFD
+	 * @return arreglo de strings con los inputs
+	 * @throws EmptyFieldException
+	 * @throws InitialStateException
+	 */
+	public String[] getInputs(String machine) {
 		
 		String[] inputs;
-		if(isMealy) {
+		if(machine.equals(InitFrame.MEALY)) {
 			inputs = new String[tabla[0].length-1];
 			for(int i = 1; i< tabla[0].length; i++) {
 				inputs[i-1] = tabla[0][i].getText();
@@ -64,35 +70,59 @@ public class DataTablePanel extends JPanel{
 		}
 		return inputs;
 	}
-	
-	public String[][] getTabla() throws EmptyFieldException, InitialStateException {
+	public String[] getOutputsMoore() {
+		String[] outputs;
 		
-		String[][] matrixStrings = new String[tabla.length][tabla[0].length];
+		outputs = new String[tabla.length-1];
+			for(int i = 1; i< tabla.length; i++) {
+				outputs[i-1] = tabla[i][tabla.length-1].getText();
+			}
+		
+		return outputs;
+	}
+	
+	public String[] getStates() {
+		String[] states;
+		
+			states = new String[tabla.length-1];
+			for(int i = 1; i< tabla.length; i++) {
+				states[i-1] = tabla[i][0].getText();
+			}
+		
+		return states;
+	}
+	
+	public String[][] getTransitions() throws EmptyFieldException, InitialStateException {
+		
+		String[][] matrixStrings = new String[tabla.length-1][tabla[0].length-1];
 		
 		//Se verifica que el estado inicial este en la matriz
-		boolean found = false;
-		for(int i = 0; i< matrixStrings.length && !found ; i++) {
-			if(tabla[i][0].getText().equals(getInitialState())) {
-				found = true;
-			}
-		}
-		if(!found) {
-			throw new InitialStateException("No se encuentra el estado inicial dentro de la matriz"); 			
-		}
+//		boolean found = false;
+//		for(int i = 0; i< matrixStrings.length && !found ; i++) {
+//			if(tabla[i][0].getText().equals(getInitialState())) {
+//				found = true;
+//			}
+//		}
+//		if(!found) {
+//			throw new InitialStateException("No se encuentra el estado inicial dentro de la matriz"); 			
+//		}
 		
-		//Ingresa los datos de la matriz de JTexField a una matrixz de Strings
-		for(int i = 0; i< tabla.length; i++) {
-			for(int j = 0; j < tabla[0].length; j++) {
+		//Ingresa los datos de la matriz de JTexField a una matriz de Strings
+		for(int i = 1; i< tabla.length; i++) {
+			for(int j = 1; j < tabla[0].length; j++) {
 				
 				if(tabla[i][j].getText().length() == 0 && !(i == 0 && j == 0) && !(i==0 && j == tabla[0].length-1)) {
 					throw new EmptyFieldException("No pueden haber campos vacios en la matriz ");
 				}
-				matrixStrings[i][j] = tabla[i][j].getText();
+				matrixStrings[i-1][j-1] = tabla[i][j].getText();
+				//System.out.println("resultado matriz "+matrixStrings[i-1][j-1]);
 			}
 		}
 		
 		return matrixStrings;
 	}
+	
+	 
 	
 	public String getInitialState() throws EmptyFieldException {
 		

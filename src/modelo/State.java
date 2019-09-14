@@ -7,6 +7,7 @@ package modelo;
 public class State {
 	
 	private String name;
+	private String output;
 	private boolean isInitial;
 	
 	
@@ -15,6 +16,29 @@ public class State {
 		this.name = name;
 		this.isInitial = false;
 	}
+	/**
+	 * Constructor para un automata de Moore
+	 * @param name
+	 * @param output
+	 */
+   public State(String name,String output) {
+		
+		this.name = name;
+		this.output=output;
+		this.isInitial = false;
+		
+	}
+
+	
+	public String getOutput() {
+		return output;
+	}
+
+
+	public void setOutput(String output) {
+		this.output = output;
+	}
+
 
 	public String getName() {
 		return name;
