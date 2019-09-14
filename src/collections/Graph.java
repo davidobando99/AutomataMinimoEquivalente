@@ -3,6 +3,7 @@ import java.io.Serializable;
 import java.util.*;
 
 
+
 public class Graph<V, E> implements IGraph<V,E>, Serializable {
 
 	/**
@@ -111,7 +112,7 @@ public class Graph<V, E> implements IGraph<V,E>, Serializable {
 //		weightMatrix[x][y] = edge1.getWeight();
 //		weightMatrix[y][x] = edge1.getWeight();
 		origin.addAdjacent(end);
-		end.addAdjacent(origin);
+		//end.addAdjacent(origin);
 
 	}
 //	@Override
@@ -505,12 +506,50 @@ public class Graph<V, E> implements IGraph<V,E>, Serializable {
 
 		}
 	}
+	public void setVisitedAllNodes() {
+		for (Map.Entry<String, NodeGraph<V>> entry : vertices.entrySet()) {
+			entry.getValue().setWasVisited(false);
+		}
+	}
+	
+	public ArrayList<NodeGraph<V>> BFS(String k) {
+
+		setVisitedAllNodes();
+		NodeGraph<V> n =searchVertex(k);
+		if (n!=null) {
+
+			LinkedList<NodeGraph<V>> cola = new LinkedList<NodeGraph<V>>();
+			cola.add(n);
+			n.setWasVisited(true);
+			ArrayList<NodeGraph<V>> array = new ArrayList<NodeGraph<V>>();
+			while (!cola.isEmpty()) {
+				NodeGraph<V> actual = cola.poll();
+				
+				array.add(actual);
+				ArrayList<NodeGraph<V>> aux = actual.getAdjList();
+				for (int i = 0; i < aux.size(); i++) {
+					NodeGraph<V> sig = aux.get(i);
+					if (sig.isWasVisited() == false) {
+						sig.setWasVisited(true);
+						cola.add(sig);
+						
+					}
+				}
+
+			}
+
+			return array;
+		} else {
+			return null;
+		}
+	}
+
 	@Override
-	public ArrayList<String> bfsGraph() {
+	public ArrayList<V> bfsGraph() {
 		Iterator<Map.Entry<String, NodeGraph<V>>> entries = vertices.entrySet().iterator();
 		ArrayList<NodeGraph<V>> vertexList = new ArrayList<NodeGraph<V>>();
 		Queue<NodeGraph<V>> queue = new LinkedList<NodeGraph<V>>();
-		ArrayList<String> all = new ArrayList<String>();
+		ArrayList<V> all = new ArrayList<V>();
 		
 		while (entries.hasNext()) {
 			Map.Entry<String, NodeGraph<V>> entry = entries.next();
@@ -520,7 +559,7 @@ public class Graph<V, E> implements IGraph<V,E>, Serializable {
 		vertexList.get(0).setWasVisited(true);
 		queue.add(vertexList.get(0));
 		displayVertex(vertexList.get(0));
-		all.add(vertexList.get(0).toString());
+		all.add(vertexList.get(0).getValue());
 		NodeGraph<V> aux2;
 
 		for (; !queue.isEmpty();) {
@@ -528,7 +567,7 @@ public class Graph<V, E> implements IGraph<V,E>, Serializable {
 			while ((aux2 = getAdjUnvisitedVertex(aux)) != null) {
 				assignVisit(vertexList, aux2);
 				displayVertex(aux2);
-				all.add(aux2.toString());
+				all.add(aux2.getValue());
 				queue.add(aux2);
 			}
 

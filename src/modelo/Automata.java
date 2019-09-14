@@ -1,5 +1,6 @@
 package modelo;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import Interfaz.InitFrame;
@@ -41,6 +42,43 @@ public class Automata {
 			
 		}
 	}
+	public void showAdjacents() {
+		for (Map.Entry<String, NodeGraph<State>> entry : graph.getVertices().entrySet()) {
+			for(int i=0;i<entry.getValue().getAdjList().size();i++) {
+				System.out.println("origen  "+entry.getKey()+"   "+entry.getValue().getAdjList().get(i).getValue().getName());
+			}
+		}
+		
+	}
+	
+	public void deleteInaacesibleStates(String initialState) {
+		for(int i=0;i<graph.BFS(initialState).size();i++) {
+			System.out.println(graph.BFS(initialState).get(i).getValue().getName());
+		}
+	String deletedState="";
+	boolean aparece=false;
+		for (Map.Entry<String, NodeGraph<State>> entry : graph.getVertices().entrySet()) {
+			 aparece = false;
+			for(int j=0;j<graph.BFS(initialState).size() && !aparece;j++) {
+				
+				if(graph.BFS(initialState).get(j).getValue().getName().equals(entry.getValue().getValue().getName())) {
+					aparece = true;
+					
+				}
+				
+			}
+			if(aparece==false) {
+				graph.removeVertex(entry.getKey());
+				break;
+			}
+			
+		}
+
+		
+		
+	}
+	
+
 	public void addState(String nameState, String output,String machine) {
 		
 		if(machine.equals(InitFrame.MOORE)) {

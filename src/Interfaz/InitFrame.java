@@ -93,6 +93,19 @@ public class InitFrame extends JFrame{
 	public void edges() {
 		automata.getEdges();
 	}
+	public void delete() {
+		try {
+			automata.deleteInaacesibleStates(dataTablePanel.getInitialState());
+		} catch (EmptyFieldException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+	}
+	
+	public void adjacents() {
+		automata.showAdjacents();
+	}
+	
 	
 	
 	public void addStates() {

@@ -75,7 +75,7 @@ public class DataTablePanel extends JPanel{
 		
 		outputs = new String[tabla.length-1];
 			for(int i = 1; i< tabla.length; i++) {
-				outputs[i-1] = tabla[i][tabla.length-1].getText();
+				outputs[i-1] = tabla[i][tabla[0].length-1].getText();
 			}
 		
 		return outputs;

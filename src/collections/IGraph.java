@@ -85,7 +85,7 @@ public interface IGraph<V, E>  {
 
 	public void assignVisit(ArrayList<NodeGraph<V>> a, NodeGraph<V> ae);
 
-	public ArrayList<String> bfsGraph();
+	public ArrayList<V> bfsGraph();
 
 	public void dfsGraph(NodeGraph<V> node);
 
