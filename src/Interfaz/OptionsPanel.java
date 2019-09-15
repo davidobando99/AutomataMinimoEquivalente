@@ -71,13 +71,19 @@ public class OptionsPanel extends JPanel implements ActionListener{
 			
 			initFrame.addTransitionsMealy();
 		
-			initFrame.states();
+			//initFrame.states();
 			//initFrame.matriz();
 			//initFrame.edges();
 			//initFrame.adjacents();
-			initFrame.delete();
-			initFrame.states();
-			
+			//initFrame.delete();
+			//initFrame.states();
+			//initFrame.edges();
+			try {
+				initFrame.firstP();
+			} catch (EmptyFieldException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 	}
 

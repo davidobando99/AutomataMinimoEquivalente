@@ -1,6 +1,8 @@
 package Interfaz;
 
 import java.awt.*;
+import java.util.ArrayList;
+
 import javax.swing.*;
 
 import modelo.Automata;
@@ -88,7 +90,7 @@ public class InitFrame extends JFrame{
 	}
 	
 	public void states() {
-		automata.getStates();
+		automata.getStatesVoid();
 	}
 	public void edges() {
 		automata.getEdges();
@@ -138,9 +140,20 @@ public class InitFrame extends JFrame{
 		}
 					
 	}
+	
+	public void firstP() throws EmptyFieldException {
+		for(int i=0;i<automata.firstPartitionMoore(dataTablePanel.getInitialState()).size();i++) {
+			System.out.println("conjunto "+i);
+			for(int j=0;j<automata.firstPartitionMoore(dataTablePanel.getInitialState()).get(i).size();j++) {
+				System.out.println(automata.firstPartitionMoore(dataTablePanel.getInitialState()).get(i).get(j).getName());
+			}
+		}
+	}
 	public void addTransitionsMealy() {
 		String[] states =dataTablePanel.getStates();
 		String[] inputs =dataTablePanel.getInputs(machine);
+		ArrayList<String> outputs = new ArrayList<String>();
+		
 		int countStates=-1;
 		int countInputs=0;
 		try {
@@ -148,10 +161,13 @@ public class InitFrame extends JFrame{
 			for(int i=0; i<dataTablePanel.getTransitions().length;i++) {
 				countStates++;
 				countInputs=0;
+				
 					for(int j=0; j<dataTablePanel.getTransitions()[0].length;j++) {
 						
 						String transition = dataTablePanel.getTransitions()[i][j];
 						String[] line = transition.split(",");
+						//Concatena las salidas en un arreglo
+						
 						
 						automata.addTransition(states[countStates], line[0], inputs[countInputs],line[1], machine);
 						countInputs++;

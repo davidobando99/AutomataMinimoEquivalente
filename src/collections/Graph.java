@@ -131,11 +131,16 @@ public class Graph<V, E> implements IGraph<V,E>, Serializable {
 	// return edges.get(key);
 	// }
 
-	// public Edge<V, E> removeEdge(String key) {
-	//
-	// return edges.remove(key);
+	public void removeEdge(V value) {
+	for(int i=0;i<edges.size();i++) {
+		if(edges.get(i).getOrigin().getValue()==value) {
+			edges.remove(i);
+		}
+		
+	}
+	 
 
-	// }
+	}
 //	@Override
 //	public void inicializeMatrix() {
 //		for (int i = 0; i < adjacentsMatrix.length; i++) {
