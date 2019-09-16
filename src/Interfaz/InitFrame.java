@@ -66,6 +66,7 @@ public class InitFrame extends JFrame{
 	public String toString(String[] symbols) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
+		
 		for (String symbol : symbols) {
 			sb.append(symbol);
 			sb.append(",");
@@ -140,12 +141,22 @@ public class InitFrame extends JFrame{
 		}
 					
 	}
-	
+	public void automata() throws EmptyFieldException {
+		
+		automataPanel.showTableState(automata.automataaa(dataTablePanel.getInputs(MOORE),dataTablePanel.getInitialState()),true);
+		//automata.automataaa(dataTablePanel.getInputs(MOORE),dataTablePanel.getInitialState());
+	//automataPanel.getTitle().setText(automata.automataEquivalente(dataTablePanel.getInputs(MOORE),dataTablePanel.getInitialState()));
+	}
 	public void firstP() throws EmptyFieldException {
-		for(int i=0;i<automata.firstPartitionMoore(dataTablePanel.getInitialState()).size();i++) {
-			System.out.println("conjunto "+i);
-			for(int j=0;j<automata.firstPartitionMoore(dataTablePanel.getInitialState()).get(i).size();j++) {
-				System.out.println(automata.firstPartitionMoore(dataTablePanel.getInitialState()).get(i).get(j).getName());
+		automata.partitionPK(dataTablePanel.getInitialState());
+		for(int i=0;i<automata.getPartitions().size();i++) {
+			System.out.println("partition "+i);
+			for(int j=0;j<automata.getPartitions().get(i).size();j++) {
+				System.out.println("conjunto  "+j);
+				for(int z=0;z<automata.getPartitions().get(i).get(j).size();z++) {
+					System.out.println(automata.getPartitions().get(i).get(j).get(z).getName());
+					
+				}
 			}
 		}
 	}

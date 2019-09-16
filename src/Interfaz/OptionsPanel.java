@@ -79,7 +79,7 @@ public class OptionsPanel extends JPanel implements ActionListener{
 			//initFrame.states();
 			//initFrame.edges();
 			try {
-				initFrame.firstP();
+				initFrame.automata();
 			} catch (EmptyFieldException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
